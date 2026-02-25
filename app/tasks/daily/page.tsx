@@ -38,10 +38,7 @@ export default function DailyTasksPage() {
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold">日常任务</h2>
-        <TaskCreateButton
-          type="daily"
-          onClick={() => setIsDialogOpen(true)}
-        />
+        <TaskCreateButton onClick={() => setIsDialogOpen(true)} />
       </div>
       {isLoading ? (
         <div className="text-center py-12 text-gray-500">加载中...</div>
@@ -51,7 +48,6 @@ export default function DailyTasksPage() {
       <TaskCreateDialog
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
-        type="daily"
         onSuccess={handleCreateSuccess}
       />
     </div>

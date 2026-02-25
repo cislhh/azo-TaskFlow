@@ -13,7 +13,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -38,7 +37,6 @@ interface TaskFormDialogProps {
   onOpenChange: (open: boolean) => void
   mode: 'create' | 'edit'
   task?: Task
-  type?: 'daily' | 'weekly'
   onSuccess?: () => void
 }
 
@@ -47,7 +45,6 @@ export function TaskFormDialog({
   onOpenChange,
   mode,
   task,
-  type = 'daily',
   onSuccess,
 }: TaskFormDialogProps) {
   const [isPending, startTransition] = useTransition()
@@ -59,19 +56,6 @@ export function TaskFormDialog({
     dueDate: new Date(),
     status: 'TODO',
   })
-
-  // 根据类型设置默认日期
-  const getDefaultDate = () => {
-    const now = new Date()
-    if (type === 'daily') {
-      return now
-    } else {
-      // 周任务默认到本周日
-      const endOfWeek = new Date(now)
-      endOfWeek.setDate(now.getDate() + (7 - now.getDay()))
-      return endOfWeek
-    }
-  }
 
   // 当对话框打开时，根据模式初始化表单数据
   useEffect(() => {
@@ -91,13 +75,13 @@ export function TaskFormDialog({
           title: '',
           description: '',
           priority: 'MEDIUM',
-          dueDate: getDefaultDate(),
+          dueDate: new Date(),
           status: 'TODO',
         })
       }
       setErrors({})
     }
-  }, [open, mode, task, type])
+  }, [open, mode, task])
 
   // 格式化日期为 datetime-local 输入格式
   const formatDateForInput = (date: Date) => {
@@ -138,7 +122,7 @@ export function TaskFormDialog({
           title: '',
           description: '',
           priority: 'MEDIUM',
-          dueDate: getDefaultDate(),
+          dueDate: new Date(),
           status: 'TODO',
         })
         onSuccess?.()
@@ -171,14 +155,9 @@ export function TaskFormDialog({
     }
   }
 
-  const title = mode === 'create'
-    ? (type === 'daily' ? '创建日常任务' : '创建周任务')
-    : '编辑任务'
-
+  const title = mode === 'create' ? '创建任务' : '编辑任务'
   const description = mode === 'create'
-    ? (type === 'daily'
-      ? '创建一个新的日常任务，添加到您的任务列表中。'
-      : '创建一个新的周任务，规划您的一周工作。')
+    ? '创建一个新的任务，添加到您的任务列表中。'
     : '修改任务信息，保存后将更新任务列表。'
 
   return (

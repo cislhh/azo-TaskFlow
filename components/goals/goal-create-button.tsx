@@ -2,19 +2,18 @@
 
 import { Button } from '@/components/ui/button'
 
-interface TaskCreateButtonProps {
+interface GoalCreateButtonProps {
   onClick?: () => void
   children?: React.ReactNode
 }
 
-export function TaskCreateButton({
+export function GoalCreateButton({
   onClick,
   children,
-}: TaskCreateButtonProps) {
+}: GoalCreateButtonProps) {
   return (
     <Button onClick={onClick}>
-      {children || '创建任务'}
+      {children || '创建目标'}
     </Button>
   )
 }
-

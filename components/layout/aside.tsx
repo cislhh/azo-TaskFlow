@@ -11,7 +11,7 @@ interface AsideProps {
 const navItems = [
   { href: '/', label: '任务总览' },
   { href: '/tasks/daily', label: '日常任务' },
-  { href: '/tasks/weekly', label: '周任务' }
+  { href: '/goals', label: '目标' }
 ] as const
 
 export function Aside({ className }: AsideProps) {

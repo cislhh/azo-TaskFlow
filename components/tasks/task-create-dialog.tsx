@@ -5,7 +5,6 @@ import { TaskFormDialog } from './task-form-dialog'
 interface TaskCreateDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  type: 'daily' | 'weekly'
   onSuccess?: () => void
 }
 
@@ -16,7 +15,6 @@ interface TaskCreateDialogProps {
 export function TaskCreateDialog({
   open,
   onOpenChange,
-  type,
   onSuccess,
 }: TaskCreateDialogProps) {
   return (
@@ -24,8 +22,8 @@ export function TaskCreateDialog({
       open={open}
       onOpenChange={onOpenChange}
       mode="create"
-      type={type}
       onSuccess={onSuccess}
     />
   )
 }
+

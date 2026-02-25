@@ -35,3 +35,15 @@ model Task {
   @@index([status])
   @@index([priority])
 }
+
+model Goal {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  targetDate  DateTime
+  progress    Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([targetDate])
+}
