@@ -5,7 +5,6 @@ describe('UI Store', () => {
   beforeEach(() => {
     // 重置 store 状态
     useUIStore.setState({
-      isCreateDialogOpen: false,
       currentView: 'dashboard'
     })
   })
@@ -13,21 +12,7 @@ describe('UI Store', () => {
   describe('initial state', () => {
     it('should have correct initial state', () => {
       const state = useUIStore.getState()
-      expect(state.isCreateDialogOpen).toBe(false)
       expect(state.currentView).toBe('dashboard')
-    })
-  })
-
-  describe('isCreateDialogOpen', () => {
-    it('should set create dialog open to true', () => {
-      useUIStore.getState().setCreateDialogOpen(true)
-      expect(useUIStore.getState().isCreateDialogOpen).toBe(true)
-    })
-
-    it('should set create dialog open to false', () => {
-      useUIStore.setState({ isCreateDialogOpen: true })
-      useUIStore.getState().setCreateDialogOpen(false)
-      expect(useUIStore.getState().isCreateDialogOpen).toBe(false)
     })
   })
 
@@ -50,13 +35,10 @@ describe('UI Store', () => {
 
   describe('state independence', () => {
     it('should handle multiple state changes', () => {
-      useUIStore.getState().setCreateDialogOpen(true)
       useUIStore.getState().setCurrentView('daily')
-      useUIStore.getState().setCreateDialogOpen(false)
       useUIStore.getState().setCurrentView('weekly')
 
       const state = useUIStore.getState()
-      expect(state.isCreateDialogOpen).toBe(false)
       expect(state.currentView).toBe('weekly')
     })
   })
