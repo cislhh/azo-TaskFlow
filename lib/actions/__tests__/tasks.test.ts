@@ -1,7 +1,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { getTasks, createTask, updateTask, deleteTask } from '../tasks'
 import { prisma } from '@/lib/db'
-import { taskSchema } from '@/lib/validations/task'
+import { taskSchema, type TaskOutput } from '@/lib/validations/task'
+
+// Define types for better type safety
+type TaskPriority = TaskOutput['priority']
+type TaskStatus = TaskOutput['status']
 
 // Mock Prisma Client
 vi.mock('@/lib/db', () => ({
@@ -106,13 +110,13 @@ describe('Server Actions - Tasks', () => {
         title: 'New Task',
         description: 'Task description',
         dueDate: new Date('2025-02-25'),
-        priority: 'MEDIUM',
-        status: 'TODO',
+        priority: 'MEDIUM' as TaskPriority,
+        status: 'TODO' as TaskStatus,
         createdAt: new Date(),
         updatedAt: new Date(),
         completedAt: null
       }
-      vi.mocked(prisma.task.create).mockResolvedValue(mockTask)
+      vi.mocked(prisma.task.create).mockResolvedValue(mockTask as any)
 
       const result = await createTask(validTaskData)
 
@@ -158,13 +162,13 @@ describe('Server Actions - Tasks', () => {
         title: 'Updated Task',
         description: 'Updated description',
         dueDate: new Date(),
-        priority: 'HIGH',
-        status: 'IN_PROGRESS',
+        priority: 'HIGH' as TaskPriority,
+        status: 'IN_PROGRESS' as TaskStatus,
         createdAt: new Date(),
         updatedAt: new Date(),
         completedAt: null
       }
-      vi.mocked(prisma.task.update).mockResolvedValue(mockTask)
+      vi.mocked(prisma.task.update).mockResolvedValue(mockTask as any)
 
       const result = await updateTask('123', { status: 'IN_PROGRESS' })
 

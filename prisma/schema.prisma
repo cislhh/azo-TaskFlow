@@ -47,3 +47,102 @@ model Goal {
 
   @@index([targetDate])
 }
+
+// Enums for Interview Practice
+enum ResumeSource {
+  TEXT_PASTE
+  PDF_UPLOAD
+}
+
+enum QuestionType {
+  OBJECTIVE  // Multiple choice, single answer
+  SUBJECTIVE // Text answer requiring AI evaluation
+}
+
+enum QuizStatus {
+  DRAFT
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum DifficultyLevel {
+  EASY
+  MEDIUM
+  HARD
+}
+
+// Resume model - stores user resume data
+model Resume {
+  id          String       @id @default(cuid())
+  userId      String?      // Optional for future multi-user support
+  source      ResumeSource
+  content     String       @db.Text // Raw text content
+  filePath    String?      // For uploaded PDFs
+
+  // AI-extracted data
+  techStack   String[]     @default([])
+  projects    Json?        // Structured project data
+  level       String?      // Candidate level: junior/mid/senior
+  focusAreas  String[]     @default([])
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  quizzes     Quiz[]
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// Quiz model - represents a complete quiz session
+model Quiz {
+  id          String       @id @default(cuid())
+  resumeId    String
+  resume      Resume       @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  userId      String?      // Optional for future multi-user support
+
+  status      QuizStatus   @default(DRAFT)
+  score       Int?         // Final score (0-100)
+
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  questions   Question[]
+
+  @@index([resumeId])
+  @@index([userId])
+  @@index([status])
+}
+
+// Question model - individual questions within a quiz
+model Question {
+  id              String         @id @default(cuid())
+  quizId          String
+  quiz            Quiz           @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  type            QuestionType
+  difficulty      DifficultyLevel
+  order           Int            // Question order (1-30)
+
+  // Question content
+  text            String         @db.Text
+  options         Json?          // For objective questions: [{id, text}]
+  correctAnswer   String?        // For objective questions
+  explanation     String?        @db.Text // AI-generated explanation
+
+  // User's answer
+  userAnswer      String?        @db.Text
+  isCorrect       Boolean?
+
+  // AI evaluation (for subjective questions)
+  aiEvaluation    Json?          // {score: number, feedback: string, corrections: string[]}
+
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([quizId])
+  @@index([type])
+  @@index([difficulty])
+}

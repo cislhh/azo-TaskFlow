@@ -9,9 +9,10 @@ interface AsideProps {
 }
 
 const navItems = [
-  { href: '/', label: '任务总览' },
+  { href: '/', label: '仪表板' },
   { href: '/tasks/daily', label: '日常任务' },
-  { href: '/goals', label: '目标' }
+  { href: '/goals', label: '目标管理' },
+  { href: '/interview', label: '面试练习' }
 ] as const
 
 export function Aside({ className }: AsideProps) {
